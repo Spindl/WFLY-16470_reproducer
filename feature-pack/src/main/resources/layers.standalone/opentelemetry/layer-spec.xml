@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This layer adds the NTS security configuration -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="opentelemetry">
+    <!--
+        <subsystem xmlns="urn:wildfly:opentelemetry:1.0" service-name="example">
+            <exporter type="jaeger"/>
+            <span-processor type="simple" batch-delay="4500" max-queue-size="128" max-export-batch-size="512" export-timeout="4500"/>
+            <sampler type="on" ratio="1.0"/>
+        </subsystem>
+    -->
+    <feature spec="subsystem.opentelemetry">
+        <param name="service-name" value="opentelemetry" />
+        <param name="exporter-type" value="jaeger" />
+        <param name="span-processor-type" value="simple" />
+        <param name="batch-delay" value="4500" />
+        <param name="max-queue-size" value="128" />
+        <param name="max-export-batch-size" value="512" />
+        <param name="export-timeout" value="4500" />
+        <param name="sampler-type" value="on" />
+        <param name="ratio" value="1.0" />
+    </feature>
+</layer-spec>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.nts.reproducer.wfly-16470</groupId>
+        <artifactId>wfly-16470-reproducer</artifactId>
+        <version>local-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>feature-pack</artifactId>
+    <packaging>pom</packaging>
+
+    <build>
+        <finalName>${server.name}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.galleon-plugins</groupId>
+                <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                <version>5.2.10.Final</version>
+                <executions>
+                    <execution>
+                        <id>nts-wildfly-feature-pack-build</id>
+                        <goals>
+                            <goal>build-user-feature-pack</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <fork-embedded>${galleon.fork.embedded}</fork-embedded>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <!-- Other feature pack dependencies -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-galleon-pack</artifactId>
+            <version>26.1.1.Final</version>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.nts.reproducer.wfly-16470</groupId>
+        <artifactId>wfly-16470-reproducer</artifactId>
+        <version>local-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>server</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <!-- Jakarta EE -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- The WildFly OpenTelemetry API, could be that this dependency is not even needed -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-opentelemetry-api</artifactId>
+            <version>26.1.1.Final</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <release>11</release>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <version>7.0.2.Final</version>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <location>wildfly@maven(org.jboss.universe:community-universe)#26.1.1.Final</location>
+                        </feature-pack>
+                        <feature-pack>
+                            <groupId>com.nts.reproducer.wfly-16470</groupId>
+                            <artifactId>feature-pack</artifactId>
+                            <version>local-SNAPSHOT</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <layers>
+                        <layer>cdi</layer>
+                        <layer>jaxrs</layer>
+                        <layer>logging</layer>
+                        <layer>opentelemetry</layer>
+                    </layers>
+                    <context-root>true</context-root>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
